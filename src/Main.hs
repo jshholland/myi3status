@@ -139,7 +139,7 @@ processLines = CL.mapM $ \line ->
 mail :: IO Block
 mail = do
   unread <- init <$> readProcess "notmuch-remote"
-                                 ["count", "tag:inbox", "tag:unread"]
+                                 ["count", "tag:inbox", "AND", "tag:unread"]
                                  ""
   inbox <- init <$> readProcess "notmuch-remote"
                                 ["count", "tag:inbox"]

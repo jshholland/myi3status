@@ -15,10 +15,8 @@ import Data.Maybe (catMaybes)
 import Data.Monoid
 import Data.Text (Text)
 import qualified Data.Text as T
-import qualified Data.Text.IO as T
 import Data.Text.Encoding
 import System.Process
-import System.IO
 
 -- Parser for i3bar protocol
 
@@ -59,6 +57,7 @@ instance FromJSON Markup where
                            "pango" -> pure Pango
                            "none" -> pure NoMarkup
                            _ -> empty
+  parseJSON _ = empty
 
 instance ToJSON Markup where
   toJSON Pango    = "pango"
@@ -93,6 +92,7 @@ instance FromJSON Block where
     v .:? "separator" <*>
     v .:? "separator_block_width" <*>
     v .:? "markup"
+  parseJSON _ = empty
 
 instance ToJSON Block where
   toJSON b = object $ "full_text" .= view fullText b : catMaybes
@@ -109,8 +109,8 @@ instance ToJSON Block where
     ]
 
 block :: Text -> Block
-block fullText = Block {
-    _fullText            = fullText
+block text = Block {
+    _fullText            = text
   , _shortText           = Nothing
   , _color               = Nothing
   , _minWidth            = Nothing
